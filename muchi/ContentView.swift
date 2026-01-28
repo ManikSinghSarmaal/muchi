@@ -54,9 +54,6 @@ struct ContentView: View {
                         .font(.system(size: 14, weight: .regular))
                         .foregroundColor(textColor.opacity(0.4))
 
-                    Text("Build by Manik with ❤️")
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundColor(textColor.opacity(0.4))
                 }
                 .padding(.top, 60)
                 

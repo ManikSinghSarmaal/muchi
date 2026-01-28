@@ -8,7 +8,6 @@
 import SwiftUI
 
 /// The first step of onboarding - asks the user for their name.
-/// Features a minimal, zen aesthetic with oceanic teal accents.
 struct NameInputView: View {
     @Binding var name: String
     var onContinue: () -> Void
@@ -113,6 +112,8 @@ struct NameInputView: View {
     // MARK: - Computed Properties
     
     /// User can continue only if they've entered a non-empty name
+    // add a feature whcich does semething like if the user sets name as empty, add something like in the next page, oh so you dont want to introduce yourself, makes sense, feel free to contiue forward
+    // and also add a back button to let user go back to the previous page and re-enter the name if done by mistake or incorrectly
     private var canContinue: Bool {
         !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }

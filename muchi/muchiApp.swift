@@ -29,8 +29,7 @@ struct muchiApp: App {
     }()
     
     init() {
-        // MARK: - Debug: Reset onboarding for testing (remove this line in production)
-        // Comment the line below once you've tested the onboarding flow:
+        // MARK: - Debug: Reset onboarding for testing (will remove this line in production)
         UserDefaults.standard.removeObject(forKey: "hasCompletedOnboarding")
     }
 
