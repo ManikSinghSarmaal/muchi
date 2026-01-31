@@ -66,9 +66,11 @@ struct ContentView: View {
     
     // MARK: - Computed Properties
     
-    /// Returns the user's name from SwiftData, or a fallback
+    /// Returns the user's name from SwiftData, or "Friend" if empty/missing
     private var userName: String {
-        users.first?.name ?? "Friend"
+        guard let user = users.first else { return "Friend" }
+        let name = user.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        return name.isEmpty ? "Friend" : name
     }
     
     /// Returns a time-appropriate greeting with the user's name
