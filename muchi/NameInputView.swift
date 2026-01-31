@@ -62,12 +62,12 @@ struct NameInputView: View {
                     // Greeting text
                     VStack(spacing: 12) {
                         Text("Hey there 👋")
-                            .font(.josefinSansMedium(size: 17))
+                            .font(.josefinSansSemiBold(size: 17))
                             .foregroundColor(textColor.opacity(0.6))
                             .tracking(1)
                         
                         Text("What do I call you?")
-                            .font(.josefinSansSemiBold(size: 32))
+                            .font(.josefinSansLight(size: 32))
                             .foregroundColor(textColor)
                             .multilineTextAlignment(.center)
                     }
@@ -75,7 +75,7 @@ struct NameInputView: View {
                     // Name input field with underline
                     VStack(spacing: 8) {
                         TextField("Your name", text: $name)
-                            .font(.josefinSansRegular(size: 24))
+                            .font(.josefinSansLight(size: 24))
                             .foregroundColor(textColor)
                             .multilineTextAlignment(.center)
                             .textInputAutocapitalization(.words)

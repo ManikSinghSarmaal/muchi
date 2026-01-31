@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - Josefin Sans Font Extension
 extension Font {
     /// Josefin Sans - Light weight
-    static func josfinSansLight(size: CGFloat) -> Font {
+    static func josefinSansLight(size: CGFloat) -> Font {
         .custom("JosefinSans-Light", size: size, relativeTo: .body)
     }
     
@@ -340,12 +340,12 @@ struct AgeInputView: View {
                                         .foregroundColor(subtitleColor)
                                         .tracking(3)
                                     
-                                    Text("— or —")
+                                    Text(" or ")
                                         .font(.josefinSansLight(size: 14))
                                         .foregroundColor(subtitleColor.opacity(0.5))
                                         .tracking(2)
                                     
-                                    Text("prefer to stay unnamed")
+                                    Text("you prefer to stay unnamed")
                                         .font(.josefinSansLight(size: 18))
                                         .foregroundColor(subtitleColor.opacity(0.8))
                                         .tracking(2)
