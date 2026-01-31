@@ -103,7 +103,7 @@ struct NameInputView: View {
                 
                 Spacer()
                 
-                // Continue button
+                // Continue button - always enabled (empty name handled in next screen)
                 Button(action: {
                     // Haptic feedback for delight
                     let impactFeedback = UIImpactFeedbackGenerator(style: .light)
@@ -117,17 +117,15 @@ struct NameInputView: View {
                         .frame(height: 56)
                         .background(
                             LinearGradient(
-                                colors: canContinue ? [accentTeal, accentTurquoise] : [Color.gray.opacity(0.3), Color.gray.opacity(0.3)],
+                                colors: [accentTeal, accentTurquoise],
                                 startPoint: .leading,
                                 endPoint: .trailing
                             )
                         )
                         .cornerRadius(16)
                 }
-                .disabled(!canContinue)
                 .padding(.horizontal, 24)
                 .padding(.bottom, 40)
-                .animation(.easeInOut(duration: 0.2), value: canContinue)
             }
         }
         .onAppear {
@@ -138,14 +136,6 @@ struct NameInputView: View {
         }
     }
     
-    // MARK: - Computed Properties
-    
-    /// User can continue only if they've entered a non-empty name
-    // add a feature whcich does semething like if the user sets name as empty, add something like in the next page, oh so you dont want to introduce yourself, makes sense, feel free to contiue forward
-    // and also add a back button to let user go back to the previous page and re-enter the name if done by mistake or incorrectly
-    private var canContinue: Bool {
-        !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
 }
 
 #Preview {

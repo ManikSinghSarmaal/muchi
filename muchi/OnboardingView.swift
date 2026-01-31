@@ -41,9 +41,13 @@ struct OnboardingView: View {
             
             // Age input screen
             if currentStep == .age {
-                AgeInputView(name: userName, age: $userAge) {
+                AgeInputView(name: userName, age: $userAge, onComplete: {
                     saveUserAndComplete()
-                }
+                }, onBack: {
+                    withAnimation(.easeInOut(duration: 0.4)) {
+                        currentStep = .name
+                    }
+                })
                 .transition(.opacity)
             }
         }

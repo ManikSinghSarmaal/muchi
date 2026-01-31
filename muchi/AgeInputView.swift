@@ -234,20 +234,27 @@ struct ZenHorizonScene: View {
 // MARK: - Age Input View
 /// The second step of onboarding - asks the user for their age.
 /// Features a zen horizon scene with sun/moon animation above the greeting.
+/// Handles empty name scenario with a special message and skip option.
 struct AgeInputView: View {
     let name: String
     @Binding var age: Int
     var onComplete: () -> Void
+    var onBack: () -> Void
     
     // MARK: - Animation State
     @State private var contentAppeared = false
     
-    // MARK: - Design Tokens
+    // MARK: - Computed Properties
+    private var isNameEmpty: Bool {
+        name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+    
     private var isNightTime: Bool {
         let hour = Calendar.current.component(.hour, from: Date())
         return hour >= 19 || hour < 6
     }
     
+    // MARK: - Design Tokens
     private var backgroundColor: LinearGradient {
         isNightTime
         ? LinearGradient(
@@ -281,6 +288,26 @@ struct AgeInputView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
+                // Top navigation bar (back button for normal flow)
+                if !isNameEmpty {
+                    HStack {
+                        Button(action: {
+                            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                            impactFeedback.impactOccurred()
+                            onBack()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundColor(textColor.opacity(0.7))
+                                .frame(width: 44, height: 44)
+                        }
+                        Spacer()
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+                    .opacity(contentAppeared ? 1 : 0)
+                }
+                
                 Spacer()
                 
                 // Main content with zen scene
@@ -298,75 +325,169 @@ struct AgeInputView: View {
                             .frame(width: contentAppeared ? 120 : 0, height: 2)
                             .animation(.easeOut(duration: 0.8).delay(0.5), value: contentAppeared)
                         
-                        Text("Muchi is excited to meet you!")
-                            .font(.josefinSansMedium(size: 17))
-                            .foregroundColor(subtitleColor)
-                            .tracking(1)
-                            .padding(.top, 12)
+                        if isNameEmpty {
+                            // Empty name message - contemplative typography
+                            VStack(spacing: 16) {
+                                // Minimal ellipsis as a pause moment
+                                Text("· · ·")
+                                    .font(.josefinSansLight(size: 24))
+                                    .foregroundColor(subtitleColor.opacity(0.5))
+                                    .tracking(8)
+                                
+                                VStack(spacing: 6) {
+                                    Text("you rushed")
+                                        .font(.josefinSansLight(size: 22))
+                                        .foregroundColor(subtitleColor)
+                                        .tracking(3)
+                                    
+                                    Text("— or —")
+                                        .font(.josefinSansLight(size: 14))
+                                        .foregroundColor(subtitleColor.opacity(0.5))
+                                        .tracking(2)
+                                    
+                                    Text("prefer to stay unnamed")
+                                        .font(.josefinSansLight(size: 18))
+                                        .foregroundColor(subtitleColor.opacity(0.8))
+                                        .tracking(2)
+                                }
+                                
+                                // Subtle reflection prompt
+                                Text("either way, that's okay")
+                                    .font(.josefinSansRegular(size: 14))
+                                    .foregroundColor(subtitleColor.opacity(0.5))
+                                    .tracking(1)
+                                    .padding(.top, 8)
+                            }
+                            .multilineTextAlignment(.center)
+                            .padding(.top, 16)
                             .opacity(contentAppeared ? 1 : 0)
                             .offset(y: contentAppeared ? 0 : 20)
-                    }
-                    
-                    // Age question
-                    Text("How old are you, \(name)?")
-                        .font(.josefinSansSemiBold(size: 30))
-                        .foregroundColor(textColor)
-                        .multilineTextAlignment(.center)
-                        .padding(.top, 16)
-                        .opacity(contentAppeared ? 1 : 0)
-                        .offset(y: contentAppeared ? 0 : 20)
-                    
-                    // Age picker wheel
-                    Picker("Age", selection: $age) {
-                        ForEach(13...100, id: \.self) { ageValue in
-                            Text("\(ageValue)")
-                                .font(.josefinSansMedium(size: 28))
-                                .foregroundColor(textColor)
-                                .tag(ageValue)
+                        } else {
+                            // Normal greeting
+                            Text("Muchi is excited to meet you!")
+                                .font(.josefinSansMedium(size: 17))
+                                .foregroundColor(subtitleColor)
+                                .tracking(1)
+                                .padding(.top, 12)
+                                .opacity(contentAppeared ? 1 : 0)
+                                .offset(y: contentAppeared ? 0 : 20)
                         }
                     }
-                    .pickerStyle(.wheel)
-                    .frame(height: 150)
-                    .frame(maxWidth: 120)
-                    .clipped()
-                    .padding(.top, 24)
-                    .opacity(contentAppeared ? 1 : 0)
-                    .scaleEffect(contentAppeared ? 1 : 0.9)
+                    
+                    if !isNameEmpty {
+                        // Age question (only shown when name is provided)
+                        Text("How old are you, \(name)?")
+                            .font(.josefinSansSemiBold(size: 30))
+                            .foregroundColor(textColor)
+                            .multilineTextAlignment(.center)
+                            .padding(.top, 16)
+                            .opacity(contentAppeared ? 1 : 0)
+                            .offset(y: contentAppeared ? 0 : 20)
+                        
+                        // Age picker wheel
+                        Picker("Age", selection: $age) {
+                            ForEach(13...100, id: \.self) { ageValue in
+                                Text("\(ageValue)")
+                                    .font(.josefinSansMedium(size: 28))
+                                    .foregroundColor(textColor)
+                                    .tag(ageValue)
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(height: 150)
+                        .frame(maxWidth: 120)
+                        .clipped()
+                        .padding(.top, 24)
+                        .opacity(contentAppeared ? 1 : 0)
+                        .scaleEffect(contentAppeared ? 1 : 0.9)
+                    }
                 }
                 
                 Spacer()
                 
-                // Complete button
-                Button(action: {
-                    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-                    impactFeedback.impactOccurred()
-                    onComplete()
-                }) {
-                    HStack(spacing: 8) {
-                        Text("Cheers to better mornings")
-                            .font(.josefinSansSemiBold(size: 18))
+                // Bottom buttons
+                if isNameEmpty {
+                    // Empty name: Back (left) + Continue (right)
+                    HStack(spacing: 16) {
+                        // Back button
+                        Button(action: {
+                            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                            impactFeedback.impactOccurred()
+                            onBack()
+                        }) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "chevron.left")
+                                    .font(.system(size: 16, weight: .medium))
+                                Text("Back")
+                                    .font(.josefinSansMedium(size: 16))
+                            }
+                            .foregroundColor(textColor.opacity(0.8))
+                            .frame(height: 56)
+                            .padding(.horizontal, 20)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(textColor.opacity(0.2), lineWidth: 1.5)
+                            )
+                        }
                         
-                        Image(systemName: "sunrise.fill")
-                            .font(.system(size: 22, weight: .medium))
-                            .foregroundColor(.yellow)
+                        // Continue button
+                        Button(action: {
+                            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                            impactFeedback.impactOccurred()
+                            onComplete()
+                        }) {
+                            Text("Continue")
+                                .font(.josefinSansSemiBold(size: 18))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 56)
+                                .background(
+                                    LinearGradient(
+                                        colors: [accentTeal, accentTurquoise],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .cornerRadius(16)
+                        }
                     }
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(
-                        LinearGradient(
-                            colors: [accentTeal, accentTurquoise, accentDeepBlue],
-                            startPoint: .leading,
-                            endPoint: .trailing
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 40)
+                    .opacity(contentAppeared ? 1 : 0)
+                    .offset(y: contentAppeared ? 0 : 30)
+                } else {
+                    // Normal flow: Cheers to better mornings button
+                    Button(action: {
+                        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                        impactFeedback.impactOccurred()
+                        onComplete()
+                    }) {
+                        HStack(spacing: 8) {
+                            Text("Cheers to better mornings")
+                                .font(.josefinSansSemiBold(size: 18))
+                            
+                            Image(systemName: "sunrise.fill")
+                                .font(.system(size: 22, weight: .medium))
+                                .foregroundColor(.yellow)
+                        }
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .background(
+                            LinearGradient(
+                                colors: [accentTeal, accentTurquoise, accentDeepBlue],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
                         )
-                    )
-                    .cornerRadius(16)
-                    .shadow(color: accentTeal.opacity(0.3), radius: 10, x: 0, y: 5)
+                        .cornerRadius(16)
+                        .shadow(color: accentTeal.opacity(0.3), radius: 10, x: 0, y: 5)
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 40)
+                    .opacity(contentAppeared ? 1 : 0)
+                    .offset(y: contentAppeared ? 0 : 30)
                 }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 40)
-                .opacity(contentAppeared ? 1 : 0)
-                .offset(y: contentAppeared ? 0 : 30)
             }
         }
         .onAppear {
@@ -378,15 +499,18 @@ struct AgeInputView: View {
     }
 }
 
-#Preview("Day Mode") {
-    AgeInputView(name: "Manik", age: .constant(25)) {
+#Preview("Normal Flow - With Name") {
+    AgeInputView(name: "Manik", age: .constant(25), onComplete: {
         print("Onboarding complete")
-    }
+    }, onBack: {
+        print("Back tapped")
+    })
 }
 
-#Preview("Night Mode Preview") {
-    // Note: Preview shows based on actual time of day
-    AgeInputView(name: "Friend", age: .constant(22)) {
-        print("Onboarding complete")
-    }
+#Preview("Empty Name Flow") {
+    AgeInputView(name: "", age: .constant(25), onComplete: {
+        print("Continuing anonymously")
+    }, onBack: {
+        print("Going back to enter name")
+    })
 }
