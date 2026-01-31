@@ -32,14 +32,11 @@ struct OnboardingView: View {
             // Name input screen
             if currentStep == .name {
                 NameInputView(name: $userName) {
-                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                    withAnimation(.easeInOut(duration: 0.4)) {
                         currentStep = .age
                     }
                 }
-                .transition(.asymmetric(
-                    insertion: .move(edge: .trailing).combined(with: .opacity),
-                    removal: .move(edge: .leading).combined(with: .opacity)
-                ))
+                .transition(.opacity)
             }
             
             // Age input screen
@@ -47,10 +44,7 @@ struct OnboardingView: View {
                 AgeInputView(name: userName, age: $userAge) {
                     saveUserAndComplete()
                 }
-                .transition(.asymmetric(
-                    insertion: .move(edge: .trailing).combined(with: .opacity),
-                    removal: .move(edge: .leading).combined(with: .opacity)
-                ))
+                .transition(.opacity)
             }
         }
     }

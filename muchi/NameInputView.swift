@@ -7,6 +7,34 @@
 
 import SwiftUI
 
+// // MARK: - Josefin Sans Font Extension
+// extension Font {
+//     /// Josefin Sans - Light weight
+//     static func josefinSansLight(size: CGFloat) -> Font {
+//         .custom("JosefinSans-Light", size: size, relativeTo: .body)
+//     }
+    
+//     /// Josefin Sans - Regular weight
+//     static func josefinSansRegular(size: CGFloat) -> Font {
+//         .custom("JosefinSans-Regular", size: size, relativeTo: .body)
+//     }
+    
+//     /// Josefin Sans - Medium weight
+//     static func josefinSansMedium(size: CGFloat) -> Font {
+//         .custom("JosefinSans-Medium", size: size, relativeTo: .body)
+//     }
+    
+//     /// Josefin Sans - SemiBold weight
+//     static func josefinSansSemiBold(size: CGFloat) -> Font {
+//         .custom("JosefinSans-SemiBold", size: size, relativeTo: .body)
+//     }
+    
+//     /// Josefin Sans - Bold weight
+//     static func josefinSansBold(size: CGFloat) -> Font {
+//         .custom("JosefinSans-Bold", size: size, relativeTo: .body)
+//     }
+// }
+
 /// The first step of onboarding - asks the user for their name.
 struct NameInputView: View {
     @Binding var name: String
@@ -34,11 +62,12 @@ struct NameInputView: View {
                     // Greeting text
                     VStack(spacing: 12) {
                         Text("Hey there 👋")
-                            .font(.system(size: 17, weight: .medium))
+                            .font(.josefinSansMedium(size: 17))
                             .foregroundColor(textColor.opacity(0.6))
+                            .tracking(1)
                         
                         Text("What do I call you?")
-                            .font(.system(size: 32, weight: .semibold, design: .default))
+                            .font(.josefinSansSemiBold(size: 32))
                             .foregroundColor(textColor)
                             .multilineTextAlignment(.center)
                     }
@@ -46,7 +75,7 @@ struct NameInputView: View {
                     // Name input field with underline
                     VStack(spacing: 8) {
                         TextField("Your name", text: $name)
-                            .font(.system(size: 24, weight: .regular))
+                            .font(.josefinSansRegular(size: 24))
                             .foregroundColor(textColor)
                             .multilineTextAlignment(.center)
                             .textInputAutocapitalization(.words)
@@ -82,7 +111,7 @@ struct NameInputView: View {
                     onContinue()
                 }) {
                     Text("Continue")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.josefinSansSemiBold(size: 18))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)

@@ -30,7 +30,7 @@ struct ContentView: View {
                 
                 // Welcome message with user's name
                 Text(greeting)
-                    .font(.system(size: 32, weight: .semibold))
+                    .font(.josefinSansSemiBold(size: 32))
                     .foregroundColor(textColor)
                 
                 // Placeholder for future alarm UI
@@ -46,12 +46,12 @@ struct ContentView: View {
                         )
                     
                     Text("Ready to set your first intention?")
-                        .font(.system(size: 18, weight: .medium))
+                        .font(.josefinSansMedium(size: 18))
                         .foregroundColor(textColor.opacity(0.7))
                         .multilineTextAlignment(.center)
                     
                     Text("Coming soon...")
-                        .font(.system(size: 14, weight: .regular))
+                        .font(.josefinSansRegular(size: 14))
                         .foregroundColor(textColor.opacity(0.4))
 
                 }
